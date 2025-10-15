@@ -4,11 +4,11 @@ To read the given data and perform Feature Scaling and Feature Selection process
 data to a file.
 
 # ALGORITHM:
-STEP 1:Read the given Data.
-STEP 2:Clean the Data Set using Data Cleaning Process.
-STEP 3:Apply Feature Scaling for the feature in the data set.
-STEP 4:Apply Feature Selection for the feature in the data set.
-STEP 5:Save the data to the file.
+#### STEP 1:Read the given Data.
+#### STEP 2:Clean the Data Set using Data Cleaning Process.
+#### STEP 3:Apply Feature Scaling for the feature in the data set.
+#### STEP 4:Apply Feature Selection for the feature in the data set.
+#### STEP 5:Save the data to the file.
 
 # FEATURE SCALING:
 1. Standard Scaler: It is also called Z-score normalization. It calculates the z-score of each value and replaces the value with the calculated Z-score. The features are then rescaled with x̄ =0 and σ=1
@@ -24,56 +24,148 @@ The feature selection techniques used are:
 3.Embedded Method
 
 # CODING AND OUTPUT:
-![Screenshot 2025-04-26 111326](https://github.com/user-attachments/assets/aa37c7a0-7a1c-4475-bd47-cbfcc093941a)
+```
+NAME : RASIKA M
+REFERENCE NO : 212222230117
+```
+```
+import pandas as pd
+import numpy as np
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix
+data=pd.read_csv("/content/income(1) (1).csv",na_values=[ " ?"])
+data
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/ca77f2ff-56d2-497a-b7c8-4758535ecd0d)
+```
+data.isnull().sum()
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/df566d53-be78-4d89-bd82-d6951845258b)
+```
+missing=data[data.isnull().any(axis=1)]
+missing
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/6fd563b8-3d3f-422f-ac06-36025c5aeb33)
+```
+data2=data.dropna(axis=0)
+data2
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/3f1b25f6-d6cc-4cf7-8296-69f41a06529e)
+```
+sal=data["SalStat"]
+data2["SalStat"]=data["SalStat"].map({' less than or equal to 50,000':0,' greater than 50,000':1})
+print(data2['SalStat'])
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/13028cf0-99aa-4049-83be-f9060f5b9bbf)
+```
+sal2=data2['SalStat']
+dfs=pd.concat([sal,sal2],axis=1)
+dfs
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/23eec7bf-f38e-41db-a870-3d8df8103ea2)
+```
+data2
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/521378b5-9719-4fbd-9457-fef525c9243a)
+```
+new_data=pd.get_dummies(data2, drop_first=True)
+new_data
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/7dc57367-3e63-47e6-97cc-b793d9c73813)
+```
+columns_list=list(new_data.columns)
+print(columns_list)
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/47f4b895-72ce-4d25-bdc2-ae76a484fe26)
+```
+features=list(set(columns_list)-set(['SalStat']))
+print(features)
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/57ea8147-82b1-41d0-9e43-756165949ded)
+```
+y=new_data['SalStat'].values
+print(y)
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/c03713b9-12f8-41b1-bd30-21e93baef57c)
+```
+x=new_data[features].values
+print(x)
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/4c44ca14-3c12-4e8e-8455-f3a89fa9b2da)
+```
+train_x,test_x,train_y,test_y=train_test_split(x,y,test_size=0.3,random_state=0)
+KNN_classifier=KNeighborsClassifier(n_neighbors = 5)
+KNN_classifier.fit(train_x,train_y)
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/f44b8500-30a4-4780-8594-198ad38248be)
+```
+prediction=KNN_classifier.predict(test_x)
+confusionMatrix=confusion_matrix(test_y, prediction)
+print(confusionMatrix)
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/7a804881-6539-434f-8707-6af6b812bafc)
+```
+accuracy_score=accuracy_score(test_y,prediction)
+print(accuracy_score)
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/a01da385-bca7-47b7-a4c1-2e14f779c859)
+```
+print("Misclassified Samples : %d" % (test_y !=prediction).sum())
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/6a6242d6-e97e-4214-a850-905342ec9eb7)
 
-![Screenshot 2025-04-26 111355](https://github.com/user-attachments/assets/bab860db-86c2-48c5-af4c-b512a44fd4e5)
+```
+data.shape
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/b3d24141-7608-49e1-ab3a-ed195a1ae7fe)
+```
+import pandas as pd
+from sklearn.feature_selection import SelectKBest, mutual_info_classif, f_classif
+data={
+    'Feature1': [1,2,3,4,5],
+    'Feature2': ['A','B','C','A','B'],
+    'Feature3': [0,1,1,0,1],
+    'Target'  : [0,1,1,0,1]
+}
 
-![Screenshot 2025-04-26 111408](https://github.com/user-attachments/assets/9f72a0f0-64a0-4f00-99a2-48059ba09298)
-
-![Screenshot 2025-04-26 111421](https://github.com/user-attachments/assets/876544a5-90db-4839-8883-e6d4c952218e)
-
-![Screenshot 2025-04-26 111434](https://github.com/user-attachments/assets/5da63c4f-4269-454d-9d4c-c00c31b4f7be)
-
-![Screenshot 2025-04-26 111442](https://github.com/user-attachments/assets/71b46bba-72b3-42ad-a8a7-62cc036c2185)
-
-![Screenshot 2025-04-26 111459](https://github.com/user-attachments/assets/66c2e713-9510-467a-805d-dd1cd9c762ea)
-
-![Screenshot 2025-04-26 111508](https://github.com/user-attachments/assets/3e60fe53-4f8a-4dfa-bad6-5405a18d5857)
-
-![Screenshot 2025-04-26 111515](https://github.com/user-attachments/assets/f43ed13f-8a3c-45ad-9fd7-f8c268e9c86f)
-
-![Screenshot 2025-04-26 111528](https://github.com/user-attachments/assets/44078a7c-59f9-4223-b647-5628840a63d2)
-
-![Screenshot 2025-04-26 111537](https://github.com/user-attachments/assets/864425bc-cfca-40f7-88af-28a0b37dcf42)
-
-![Screenshot 2025-04-26 111545](https://github.com/user-attachments/assets/e0c839bc-b683-40cf-aa4d-277591302328)
-
-![Screenshot 2025-04-26 111551](https://github.com/user-attachments/assets/f31442cc-45bf-4666-82b8-057acec77531)
-
-![Screenshot 2025-04-26 111604](https://github.com/user-attachments/assets/0ec21fe5-e47c-45c0-97d1-4be2658900fc)
-
-![Screenshot 2025-04-26 111616](https://github.com/user-attachments/assets/b0c96208-f1f1-407b-ae59-8a190c452bcc)
-
-![Screenshot 2025-04-26 111630](https://github.com/user-attachments/assets/a613197c-bb14-41dd-b853-442184a8df42)
-
-![Screenshot 2025-04-26 111644](https://github.com/user-attachments/assets/920a7325-9950-40c5-b6cb-0abe0404bbc4)
-
-![Screenshot 2025-04-26 111706](https://github.com/user-attachments/assets/9bd8e510-677b-49ca-96a0-6f5889d4aa96)
-
-![Screenshot 2025-04-26 111714](https://github.com/user-attachments/assets/d6d6e1e2-b0d2-4a2c-87c5-26e3408e269a)
-
-![Screenshot 2025-04-26 111724](https://github.com/user-attachments/assets/21245783-7e00-499e-941a-88723c2e1581)
-
-![Screenshot 2025-04-26 111733](https://github.com/user-attachments/assets/abdfd336-3ed9-470b-a171-dd26011c21bb)
-
-![Screenshot 2025-04-26 111741](https://github.com/user-attachments/assets/00987941-7a09-4409-b459-b2f72b992bce)
-
-![Screenshot 2025-04-26 111754](https://github.com/user-attachments/assets/8ae98bd6-c7d9-482d-b2d3-c802601b97f3)
-
-![Screenshot 2025-04-26 111802](https://github.com/user-attachments/assets/68365a66-6e29-4285-bc0a-2faea6587951)
+df=pd.DataFrame(data)
+x=df[['Feature1','Feature3']]
+y=df[['Target']]
+selector=SelectKBest(score_func=mutual_info_classif,k=1)
+x_new=selector.fit_transform(x,y)
+selected_feature_indices=selector.get_support(indices=True)
+selected_features=x.columns[selected_feature_indices]
+print("Selected Features:")
+print(selected_features)
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/b89ccdd7-12db-4edd-b017-b5eeeb04e033)
+```
+import pandas as pd
+import numpy as np
+from scipy.stats import chi2_contingency
+import seaborn as sns
+tips=sns.load_dataset('tips')
+tips.head()
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/9fe99701-4887-490c-b0ae-7e913681954b)
+```
+tips.time.unique()
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/62a26d0b-1d1f-462c-898f-647229d3d613)
+```
+contingency_table=pd.crosstab(tips['sex'],tips['time'])
+print(contingency_table)
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/c4f24078-6573-44c9-8ff9-ef7197486de8)
+```
+chi2,p,_,_=chi2_contingency(contingency_table)
+print(f"Chi-Square Statistics: {chi2}")
+print(f"P-Value: {p}")
+```
+![image](https://github.com/22008650/EXNO-4-DS/assets/122548204/2d91381c-c939-4980-ab3e-ae4aaf828aab)
 
 
 # RESULT:
-Thus the the given data is performed Feature Scaling and Feature Selection process and saved the
-data to a file successfully.
-
+Thus, Feature selection and Feature scaling has been used on thegiven dataset.
