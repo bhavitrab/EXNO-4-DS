@@ -24,10 +24,7 @@ The feature selection techniques used are:
 3.Embedded Method
 
 # CODING AND OUTPUT:
-```
-NAME : RASIKA M
-REFERENCE NO : 212222230117
-```
+
 ```
 import pandas as pd
 import numpy as np
